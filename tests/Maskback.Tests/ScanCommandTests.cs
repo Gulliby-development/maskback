@@ -25,7 +25,7 @@ public sealed class ScanCommandTests
 
         var code = Cli.Run(["scan", "in.txt", "extra"], inputs, output);
 
-        Assert.Equal("2||maskback: usage: maskback scan FILE [--kinds LIST]\n", $"{code}|{output.Out}|{output.Err}");
+        Assert.Equal("2||maskback: usage: maskback scan FILE [--kinds LIST] [--summary]\n", $"{code}|{output.Out}|{output.Err}");
         Assert.Empty(reads);
         Assert.Empty(output.Files);
     }
