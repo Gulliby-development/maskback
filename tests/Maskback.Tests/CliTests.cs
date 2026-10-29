@@ -9,25 +9,25 @@ public sealed class CliTests
     [Theory]
     [InlineData(new string[] { }, "2||" +
         "usage: maskback mask FILE [--kinds LIST] [--map FILE]\n" +
-        "       maskback scan FILE [--kinds LIST]\n" +
+        "       maskback scan FILE [--kinds LIST] [--summary]\n" +
         "       maskback unmask FILE --map FILE [--strict]\n" +
         "       maskback relay FILE... --script FILE [--kinds LIST] [--sent FILE]\n" +
         "kinds: email, key, iban, card, ipv4\n")]
     [InlineData(new[] { "help" }, "0|" +
         "usage: maskback mask FILE [--kinds LIST] [--map FILE]\n" +
-        "       maskback scan FILE [--kinds LIST]\n" +
+        "       maskback scan FILE [--kinds LIST] [--summary]\n" +
         "       maskback unmask FILE --map FILE [--strict]\n" +
         "       maskback relay FILE... --script FILE [--kinds LIST] [--sent FILE]\n" +
         "kinds: email, key, iban, card, ipv4\n|")]
     [InlineData(new[] { "--help" }, "0|" +
         "usage: maskback mask FILE [--kinds LIST] [--map FILE]\n" +
-        "       maskback scan FILE [--kinds LIST]\n" +
+        "       maskback scan FILE [--kinds LIST] [--summary]\n" +
         "       maskback unmask FILE --map FILE [--strict]\n" +
         "       maskback relay FILE... --script FILE [--kinds LIST] [--sent FILE]\n" +
         "kinds: email, key, iban, card, ipv4\n|")]
     [InlineData(new[] { "--help", "ignored" }, "0|" +
         "usage: maskback mask FILE [--kinds LIST] [--map FILE]\n" +
-        "       maskback scan FILE [--kinds LIST]\n" +
+        "       maskback scan FILE [--kinds LIST] [--summary]\n" +
         "       maskback unmask FILE --map FILE [--strict]\n" +
         "       maskback relay FILE... --script FILE [--kinds LIST] [--sent FILE]\n" +
         "kinds: email, key, iban, card, ipv4\n|")]

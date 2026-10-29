@@ -7,7 +7,7 @@ public static class Cli
     public const string Version = "0.1.0";
     public const string Usage =
         "usage: maskback mask FILE [--kinds LIST] [--map FILE]\n" +
-        "       maskback scan FILE [--kinds LIST]\n" +
+        "       maskback scan FILE [--kinds LIST] [--summary]\n" +
         "       maskback unmask FILE --map FILE [--strict]\n" +
         "       maskback relay FILE... --script FILE [--kinds LIST] [--sent FILE]\n" +
         "kinds: email, key, iban, card, ipv4\n";

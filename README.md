@@ -27,7 +27,7 @@ The command synopsis is:
 
 ```text
 usage: maskback mask FILE [--kinds LIST] [--map FILE]
-       maskback scan FILE [--kinds LIST]
+       maskback scan FILE [--kinds LIST] [--summary]
        maskback unmask FILE --map FILE [--strict]
        maskback relay FILE... --script FILE [--kinds LIST] [--sent FILE]
 kinds: email, key, iban, card, ipv4
@@ -36,11 +36,13 @@ kinds: email, key, iban, card, ipv4
 The four commands are:
 
 - `mask FILE [--kinds LIST] [--map FILE]` reads a text file (or standard input when `FILE` is `-`), replaces every selected finding with a numbered placeholder, and writes the masked text to standard output. If `--map FILE` is supplied, it also writes the placeholder-to-original map to that path.
-- `scan FILE [--kinds LIST]` prints one `LINE:COL KIND ORIGINAL` row per finding and then `maskback: N findings`. Its exit code is 1 when it finds anything and 0 otherwise. Lines count LF characters; columns are one-based UTF-16 code-unit offsets from the start of the line, and a CR counts as a column.
+- `scan FILE [--kinds LIST] [--summary]` prints one `LINE:COL KIND ORIGINAL` row per finding (with `--summary`, one `KIND COUNT` row per selected kind) and then `maskback: N findings`. Its exit code is 1 when it finds anything and 0 otherwise. Lines count LF characters; columns are one-based UTF-16 code-unit offsets from the start of the line, and a CR counts as a column.
 - `unmask FILE --map FILE [--strict]` reads the map and replaces recognized placeholders in the reply. Unknown placeholders remain unchanged and are reported to standard error. `--strict` makes the exit code 1 if any unknown placeholder remains.
 - `relay FILE... --script FILE [--kinds LIST] [--sent FILE]` masks one or more prompts with a shared masker, sends each prompt and the accumulated conversation to the local `Scripted` provider, restores the returned reply using mappings made so far, and prints the replies separated by `---` and LF. `--sent FILE` writes the provider conversation log.
 
 The kinds are `email`, `key`, `iban`, `card`, and `ipv4`; by default all five are enabled. `--kinds` accepts a comma-separated list of these names. Options can be written as `--name value` or `--name=value`; `--strict` is a switch and takes no value. A standalone `--` ends option parsing. A single hyphen as a file name means standard input. `help` or `--help` prints usage, and `--version` prints the version.
+
+`scan --summary` is a switch for a quick overview of a file: instead of one row per finding it prints one `KIND COUNT` row for each selected kind, always in the order `email`, `key`, `iban`, `card`, `ipv4` whatever the order of `--kinds`, with `0` for a kind that was not found, and then the usual `maskback: N findings` line. The exit code is the same as without it: 1 when anything was found and 0 otherwise.
 
 Input text is decoded as strict UTF-8: malformed input is an error, and one leading U+FEFF is removed by the text decoder. The map parser still requires its exact `maskback-map 1` header. Findings are whole words: runs are split on space, TAB, CR, and LF, then surrounding punctuation is trimmed. Detectors use ASCII character classes and their documented formats; this is not general-purpose data-loss prevention.
 
@@ -76,6 +78,14 @@ $ maskback scan in.txt
 3:5 key sk-abcdefghijklmnopqrstuvwxyz
 3:39 key AKIAABCDEFGHIJKLMNOP
 3:67 email alice@example.com
+maskback: 8 findings
+exit: 1
+$ maskback scan in.txt --summary
+email 3
+key 2
+iban 1
+card 1
+ipv4 1
 maskback: 8 findings
 exit: 1
 $ maskback mask in.txt --map m.txt
